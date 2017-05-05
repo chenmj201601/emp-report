@@ -61,7 +61,6 @@ public class HtmlUtil {
 
         //</editor-fold>
 
-
         //<editor-fold desc="单元格字典集合">
 
         List<ReportCell> cells = reportDocument.getCells();
@@ -74,6 +73,7 @@ public class HtmlUtil {
 
         //</editor-fold>
 
+        //<editor-fold desc="生成表格框架">
 
         Element root = new Element("table");
         Document document = new Document(root);
@@ -120,35 +120,18 @@ public class HtmlUtil {
                     Element tableCell = new Element("td");
                     tableCell.setAttribute("rowspan", String.format("%d", cell.getRowSpan()));
                     tableCell.setAttribute("colspan", String.format("%d", cell.getColSpan()));
-                    //单元格边框样式
-                    String strStyle = "";
-                    ReportBorder border = cell.getBorder();
-                    if (border != null) {
-                        strStyle += String.format("border-style:solid;border-width:0px;");
-                        if (border.getLeft() > 0) {
-                            strStyle += String.format("border-left-width:%dpx;", border.getLeft());
-                        }
-                        if (border.getTop() > 0) {
-                            strStyle += String.format("border-top-width:%dpx;", border.getTop());
-                        }
-                        if (border.getRight() > 0) {
-                            strStyle += String.format("border-right-width:%dpx;", border.getRight());
-                        }
-                        if (border.getBottom() > 0) {
-                            strStyle += String.format("border-bottom-width:%dpx;", border.getBottom());
-                        }
-                    }
-                    if (!strStyle.equals("")) {
-                        tableCell.setAttribute("style", strStyle);
-                    }
-                    if (cell.getElement() instanceof ReportText) {
-                        ReportText reportText = (ReportText) cell.getElement();
+                    String strStyle;
+                    VisualStyle style = null;
+                    if (cell.getElement() != null) {
+                        ReportElement reportElement = cell.getElement();
                         Element div = new Element("div");
-                        int styleIndex = reportText.getStyle();
+
+                        //<editor-fold desc="单元格内容样式">
+
+                        int styleIndex = reportElement.getStyle();
                         if (styleIndex >= 0
                                 && styleIndex < reportDocument.getStyles().size()) {
-                            VisualStyle style = reportDocument.getStyles().get(styleIndex);
-                            //单元格内容样式
+                            style = reportDocument.getStyles().get(styleIndex);
                             strStyle = "";
                             strStyle += String.format("font-family:%s;", style.getFontFamily());
                             strStyle += String.format("font-size:%dpx;", style.getFontSize());
@@ -181,26 +164,68 @@ public class HtmlUtil {
                                     && foreColor.length() > 3) {
                                 strStyle += String.format("color:#%s;", foreColor.substring(3));
                             }
-                            String fillColor = style.getBackground();
-                            if (fillColor != null
-                                    && !fillColor.equals("")
-                                    && fillColor.length() > 3) {
-                                strStyle += String.format("background-color:#%s;", fillColor.substring(3));
-                            }
                             div.setAttribute("style", strStyle);
                         }
-                        div.addContent(reportText.getText());
+
+                        //</editor-fold>
+
+                        if (reportElement instanceof ReportText) {
+                            ReportText reportText = (ReportText) reportElement;
+                            div.addContent(reportText.getText());
+                        }
+                        if (reportElement instanceof ReportSequence) {
+                            ReportSequence reportSequence = (ReportSequence) reportElement;
+                            div.addContent(reportSequence.getExpression());
+                        }
+
                         tableCell.addContent(div);
                     }
+
+                    //<editor-fold desc="单元格边框及样式">
+
+                    strStyle = "";
+                    ReportBorder border = cell.getBorder();
+                    if (border != null) {
+                        strStyle += String.format("border-style:solid;border-width:0px;");
+                        if (border.getLeft() > 0) {
+                            strStyle += String.format("border-left-width:%dpx;", border.getLeft());
+                        }
+                        if (border.getTop() > 0) {
+                            strStyle += String.format("border-top-width:%dpx;", border.getTop());
+                        }
+                        if (border.getRight() > 0) {
+                            strStyle += String.format("border-right-width:%dpx;", border.getRight());
+                        }
+                        if (border.getBottom() > 0) {
+                            strStyle += String.format("border-bottom-width:%dpx;", border.getBottom());
+                        }
+                    }
+                    if (style != null) {
+                        String fillColor = style.getBackground();
+                        if (fillColor != null
+                                && !fillColor.equals("")
+                                && fillColor.length() > 3) {
+                            strStyle += String.format("background-color:#%s;", fillColor.substring(3));
+                        }
+                    }
+                    if (!strStyle.equals("")) {
+                        tableCell.setAttribute("style", strStyle);
+                    }
+
+                    //</editor-fold>
+
                     tableRow.addContent(tableCell);
                 }
             }
             root.addContent(tableRow);
         }
 
+        //</editor-fold>
+
+
         Format format = Format.getCompactFormat();
-        format.setEncoding("utf-8");
-        format.setIndent("    ");
+        format.setEncoding("utf-8");//UTF-8编码
+        format.setIndent("    ");   //4个字符的缩进
         XMLOutputter out = new XMLOutputter(format);
         strContent = out.outputString(document);
 

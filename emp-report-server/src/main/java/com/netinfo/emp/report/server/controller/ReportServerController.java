@@ -34,13 +34,14 @@ public class ReportServerController {
                 return VIEW_REPORT;
             }
             File file = ResourceUtils.getFile(String.format("reports/%s.rpt", fileName));
-            System.out.println(file.getName());
+            System.out.println(String.format("Report file name is %s.", file.getName()));
             SAXBuilder builder = new SAXBuilder();
             Document document = builder.build(file);
             ReportDocument reportDocument = ReportUtil.getReportDocument(document);
             reportDocument.setPath(file.getPath());
-            System.out.println(String.format("End %s", reportDocument.getName()));
+            System.out.println(String.format("Report name is %s.", reportDocument.getName()));
             String strHtml = HtmlUtil.generateHtml(reportDocument);
+            System.out.println(String.format("Generate html end."));
             model.addAttribute("content", strHtml);
         } catch (FileNotFoundException ex) {
             System.out.println(String.format("File not exist. %s", fileName));
