@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Report</title>
+    <!--引入bootstrap样式-->
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="container">
+    <div id="report_content"></div>
+</div>
+<script type="text/javascript" src="/bootstrap/js/jquery.js"></script>
+<script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var html=[[${content}]];
+        $("#report_content").html(html);
+    });
+</script>
+</body>
+</html>

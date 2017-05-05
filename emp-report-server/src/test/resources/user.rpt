@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReportDocument xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="user" xmlns="http://netinfo.com/emp/reports">
+    <Grid RowCount="50" ColCount="20" CellWidth="500000" CellHeight="200000">
+        <Widths>500000,500000,660000,988888,1380000,1908888,1722222,1740000,500000,500000,500000,500000,500000,500000,500000,500000,500000,500000,500000,500000</Widths>
+        <Heights>200000,200000,200000,200000,200000,391111,240000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000,200000</Heights>
+    </Grid>
+    <DataSets>
+        <DataSet Name="ds1" DataSourceName="user_data_source">
+            <Tables>
+                <Table Name="user_information" Display="user_information" />
+            </Tables>
+            <Fields>
+                <Field Name="address" Display="address" DataType="0" TableName="user_information" />
+                <Field Name="birthday" Display="birthday" DataType="0" TableName="user_information" />
+                <Field Name="password" Display="password" DataType="0" TableName="user_information" />
+                <Field Name="phone_number" Display="phone_number" DataType="0" TableName="user_information" />
+                <Field Name="qq_number" Display="qq_number" DataType="0" TableName="user_information" />
+                <Field Name="user_id" Display="user_id" DataType="0" TableName="user_information" />
+                <Field Name="user_name" Display="user_name" DataType="0" TableName="user_information" />
+            </Fields>
+        </DataSet>
+    </DataSets>
+    <Cells>
+        <Cell RowIndex="1" ColIndex="2" RowSpan="3" ColSpan="6">
+            <Element xsi:type="ReportText" Style="0">
+                <Text>用户信息表</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="2" RowSpan="1" ColSpan="1">
+            <Border Left="1" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>编号</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="3" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>姓名</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="4" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>生日</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="5" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>住址</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="6" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>手机</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="5" ColIndex="7" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="1" Right="1" Bottom="1" />
+            <Element xsi:type="ReportText" Style="1">
+                <Text>QQ</Text>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="2" RowSpan="1" ColSpan="1">
+            <Border Left="1" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="2" DataSetName="ds1" DataTableName="user_information" DataFieldName="user_id">
+                <Expression>={ds1}.{user_id}</Expression>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="3" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="2" DataSetName="ds1" DataTableName="user_information" DataFieldName="user_name">
+                <Expression>={ds1}.{user_name}</Expression>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="4" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="3" DataSetName="ds1" DataTableName="user_information" DataFieldName="birthday">
+                <Expression>={ds1}.{birthday}</Expression>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="5" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="3" DataSetName="ds1" DataTableName="user_information" DataFieldName="address">
+                <Expression>={ds1}.{address}</Expression>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="6" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="3" DataSetName="ds1" DataTableName="user_information" DataFieldName="phone_number">
+                <Expression>={ds1}.{phone_number}</Expression>
+            </Element>
+        </Cell>
+        <Cell RowIndex="6" ColIndex="7" RowSpan="1" ColSpan="1">
+            <Border Left="0" Top="0" Right="1" Bottom="1" />
+            <Element xsi:type="ReportSequence" Style="3" DataSetName="ds1" DataTableName="user_information" DataFieldName="qq_number">
+                <Expression>={ds1}.{qq_number}</Expression>
+            </Element>
+        </Cell>
+    </Cells>
+    <Styles>
+        <Style FontFamily="SimSun" FontSize="20" FontStyle="1" Foreground="#FFC0504D" Width="0" Height="0" HorizontalAlignment="1" VerticalAlignment="1" />
+        <Style FontFamily="SimSun" FontSize="15" FontStyle="1" Foreground="#FF000000" Width="0" Height="0" HorizontalAlignment="1" VerticalAlignment="1" />
+        <Style FontFamily="Segoe UI" FontSize="11" FontStyle="0" Foreground="#FF4F81BD" Width="0" Height="0" HorizontalAlignment="3" VerticalAlignment="3" />
+        <Style FontFamily="Segoe UI" FontSize="11" FontStyle="0" Foreground="#FF000000" Width="0" Height="0" HorizontalAlignment="3" VerticalAlignment="3" />
+    </Styles>
+</ReportDocument>
