@@ -1,6 +1,7 @@
 package com.netinfo.emp;
 
 import com.netinfo.emp.report.model.ReportDocument;
+import com.netinfo.emp.report.server.entity.ReportGenerator;
 import com.netinfo.emp.report.server.util.HtmlUtil;
 import com.netinfo.emp.report.server.util.ReportUtil;
 import org.jdom2.Document;
@@ -25,12 +26,16 @@ public class HtmlUtilTest {
 
     @Test
     public void testGenerateHtml() throws IOException, JDOMException {
+        String reportName="user";
+        ReportGenerator generator=new ReportGenerator();
+        generator.setReportName(reportName);
         File file = ResourceUtils.getFile(String.format("classpath:user.rpt"));
         SAXBuilder builder = new SAXBuilder();
         Document document = builder.build(file);
         ReportDocument reportDocument = ReportUtil.getReportDocument(document);
         reportDocument.setPath(file.getPath());
-        String strContent = HtmlUtil.generateHtml(reportDocument);
+        generator.setReportDocument(reportDocument);
+        String strContent = HtmlUtil.generateHtml(generator);
         Assert.assertNotEquals(strContent, "");
         System.out.println(String.format("%s", strContent));
     }

@@ -7,18 +7,20 @@
     <title>Report</title>
     <!--引入bootstrap样式-->
     <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/common.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" th:href="@{/report_server/css(report_key=${report_key})}">
 </head>
 <body>
-<div class="container">
+<div>
+    <div id="report_toolbar" class="report_toolbar">
+        这是报表工具栏
+    </div>
     <div id="report_content"></div>
+    <div id="div_mask" class="div_mask">Loading...</div>
 </div>
+<input type="hidden" id="report_key" th:value="${report_key}">
 <script type="text/javascript" src="/bootstrap/js/jquery.js"></script>
 <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
-<script type="text/javascript" th:inline="javascript">
-    $(document).ready(function () {
-        var html=[[${content}]];
-        $("#report_content").html(html);
-    });
-</script>
+<script type="text/javascript" src="/js/common.js"></script>
 </body>
 </html>

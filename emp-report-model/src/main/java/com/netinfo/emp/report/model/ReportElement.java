@@ -7,13 +7,5 @@ package com.netinfo.emp.report.model;
  * Created by Charley on 2017/5/4.
  */
 public class ReportElement {
-    private int style;
 
-    public int getStyle() {
-        return style;
-    }
-
-    public void setStyle(int style) {
-        this.style = style;
-    }
 }

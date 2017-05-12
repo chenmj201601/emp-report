@@ -10,13 +10,14 @@ public class VisualStyle {
     private String fontFamily;
     private int fontSize;
     private int fontStyle;
-    private String foreground;
-    private String background;
+    private String foreColor;
+    private String backColor;
     private int width;
     private int height;
-    private int horizontalAlignment;
-    private int verticalAlignment;
+    private int hAlign;
+    private int vAlign;
     private ReportBorder border;
+    private ReportPadding padding;
     private String key;
 
     public String getFontFamily() {
@@ -43,20 +44,20 @@ public class VisualStyle {
         this.fontStyle = fontStyle;
     }
 
-    public String getForeground() {
-        return foreground;
+    public String getForeColor() {
+        return foreColor;
     }
 
-    public void setForeground(String foreground) {
-        this.foreground = foreground;
+    public void setForeColor(String foreground) {
+        this.foreColor = foreground;
     }
 
-    public String getBackground() {
-        return background;
+    public String getBackColor() {
+        return backColor;
     }
 
-    public void setBackground(String background) {
-        this.background = background;
+    public void setBackColor(String background) {
+        this.backColor = background;
     }
 
     public int getWidth() {
@@ -75,20 +76,20 @@ public class VisualStyle {
         this.height = height;
     }
 
-    public int getHorizontalAlignment() {
-        return horizontalAlignment;
+    public int gethAlign() {
+        return hAlign;
     }
 
-    public void setHorizontalAlignment(int horizontalAlignment) {
-        this.horizontalAlignment = horizontalAlignment;
+    public void sethAlign(int horizontalAlignment) {
+        this.hAlign = horizontalAlignment;
     }
 
-    public int getVerticalAlignment() {
-        return verticalAlignment;
+    public int getvAlign() {
+        return vAlign;
     }
 
-    public void setVerticalAlignment(int verticalAlignment) {
-        this.verticalAlignment = verticalAlignment;
+    public void setvAlign(int verticalAlignment) {
+        this.vAlign = verticalAlignment;
     }
 
     public ReportBorder getBorder() {
@@ -96,21 +97,30 @@ public class VisualStyle {
     }
 
     public void setBorder(ReportBorder border) {
-        border = border;
+        this.border = border;
+    }
+
+    public ReportPadding getPadding() {
+        return padding;
+    }
+
+    public void setPadding(ReportPadding padding) {
+        this.padding = padding;
     }
 
     public String getKey() {
-        key = String.format("%s_%d_%d_%s_%s_%d_%d_%d_%d_%s",
+        key = String.format("%s_%d_%d_%s_%s_%d_%d_%d_%d_%s_%s",
                 fontFamily,
                 fontSize,
                 fontStyle,
-                foreground,
-                background,
+                foreColor,
+                backColor,
                 width,
                 height,
-                horizontalAlignment,
-                verticalAlignment,
-                border != null ? border.getKey() : "");
+                hAlign,
+                vAlign,
+                border != null ? border.getKey() : "",
+                padding != null ? padding.getKey() : "");
         return key;
     }
 

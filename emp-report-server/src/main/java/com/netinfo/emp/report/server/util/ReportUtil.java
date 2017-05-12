@@ -82,27 +82,19 @@ public class ReportUtil {
                 reportCell.setColIndex(Integer.parseInt(cell.getAttributeValue("ColIndex")));
                 reportCell.setRowSpan(Integer.parseInt(cell.getAttributeValue("RowSpan")));
                 reportCell.setColSpan(Integer.parseInt(cell.getAttributeValue("ColSpan")));
-                Element border = cell.getChild("Border", report);
-                if (border != null) {
-                    ReportBorder reportBorder = new ReportBorder();
-                    reportBorder.setLeft(Integer.parseInt(border.getAttributeValue("Left")));
-                    reportBorder.setTop(Integer.parseInt(border.getAttributeValue("Top")));
-                    reportBorder.setRight(Integer.parseInt(border.getAttributeValue("Right")));
-                    reportBorder.setBottom(Integer.parseInt(border.getAttributeValue("Bottom")));
-                    reportCell.setBorder(reportBorder);
+                if (cell.getAttributeValue("Style") != null) {
+                    reportCell.setStyle(Integer.parseInt(cell.getAttributeValue("Style")));
                 }
                 Element element = cell.getChild("Element", report);
                 if (element != null) {
                     String strElementType = element.getAttributeValue("type", xsi);
                     if (strElementType.equals("ReportText")) {
                         ReportText reportText = new ReportText();
-                        reportText.setStyle(Integer.parseInt(element.getAttributeValue("Style")));
                         reportText.setText(element.getChildText("Text", report));
                         reportCell.setElement(reportText);
                     }
                     if (strElementType.equals("ReportSequence")) {
                         ReportSequence reportSequence = new ReportSequence();
-                        reportSequence.setStyle(Integer.parseInt(element.getAttributeValue("Style")));
                         reportSequence.setDataSetName(element.getAttributeValue("DataSetName"));
                         reportSequence.setDataTableName(element.getAttributeValue("DataTableName"));
                         reportSequence.setDataFieldName(element.getAttributeValue("DataFieldName"));
@@ -122,12 +114,21 @@ public class ReportUtil {
                 visualStyle.setFontFamily(style.getAttributeValue("FontFamily"));
                 visualStyle.setFontSize(Integer.parseInt(style.getAttributeValue("FontSize")));
                 visualStyle.setFontStyle(Integer.parseInt(style.getAttributeValue("FontStyle")));
-                visualStyle.setForeground(style.getAttributeValue("Foreground"));
-                visualStyle.setBackground(style.getAttributeValue("Background"));
+                visualStyle.setForeColor(style.getAttributeValue("ForeColor"));
+                visualStyle.setBackColor(style.getAttributeValue("BackColor"));
                 visualStyle.setWidth(Integer.parseInt(style.getAttributeValue("Width")));
                 visualStyle.setHeight(Integer.parseInt(style.getAttributeValue("Height")));
-                visualStyle.setHorizontalAlignment(Integer.parseInt(style.getAttributeValue("HorizontalAlignment")));
-                visualStyle.setVerticalAlignment(Integer.parseInt(style.getAttributeValue("VerticalAlignment")));
+                visualStyle.sethAlign(Integer.parseInt(style.getAttributeValue("HAlign")));
+                visualStyle.setvAlign(Integer.parseInt(style.getAttributeValue("VAlign")));
+                Element border = style.getChild("Border", report);
+                if (border != null) {
+                    ReportBorder reportBorder = new ReportBorder();
+                    reportBorder.setLeft(Integer.parseInt(border.getAttributeValue("Left")));
+                    reportBorder.setTop(Integer.parseInt(border.getAttributeValue("Top")));
+                    reportBorder.setRight(Integer.parseInt(border.getAttributeValue("Right")));
+                    reportBorder.setBottom(Integer.parseInt(border.getAttributeValue("Bottom")));
+                    visualStyle.setBorder(reportBorder);
+                }
                 reportDocument.getStyles().add(visualStyle);
             }
         }

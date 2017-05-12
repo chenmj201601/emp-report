@@ -11,7 +11,7 @@ public class ReportCell {
     private int colIndex;
     private int rowSpan;
     private int colSpan;
-    private ReportBorder border;
+    private int style;
     private ReportElement element;
 
     public int getRowIndex() {
@@ -46,12 +46,12 @@ public class ReportCell {
         this.colSpan = colSpan;
     }
 
-    public ReportBorder getBorder() {
-        return border;
+    public int getStyle() {
+        return style;
     }
 
-    public void setBorder(ReportBorder border) {
-        this.border = border;
+    public void setStyle(int style) {
+        this.style = style;
     }
 
     public ReportElement getElement() {

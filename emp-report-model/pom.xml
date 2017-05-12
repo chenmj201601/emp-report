@@ -1,20 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>emp-report</artifactId>
-        <groupId>com.netinfo.emp</groupId>
-        <version>2.01.001</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.netinfo.emp</groupId>
     <artifactId>emp-report-model</artifactId>
     <packaging>jar</packaging>
+    <version>2.01.001</version>
 
     <name>emp-report-model</name>
     <description>emp-report-model</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <!-- <parent>
+         <artifactId>emp-report</artifactId>
+         <groupId>com.netinfo.emp</groupId>
+         <version>2.01.001</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>-->
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <!--生成包含源码的jar-->
                 <groupId>org.apache.maven.plugins</groupId>
