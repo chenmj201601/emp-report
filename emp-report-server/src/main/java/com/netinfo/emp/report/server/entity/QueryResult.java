@@ -9,16 +9,16 @@ import com.netinfo.emp.report.model.ReportDataField;
  * Created by Charley on 2017/5/9.
  */
 public class QueryResult {
-    private String name;
+    private String key;
     private Object value;
     private ReportDataField field;
 
-    public String getName() {
-        return name;
+    public String getKey() {
+        return key;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Object getValue() {

@@ -1,20 +1,44 @@
-.report_toolbar {
-    background-color: #cdcdcd;
-    border-bottom: solid lightgray 1px;
-    height: 30px;
+.report-toolbar {
+    top: 0px;
+    position: fixed;
+    width: 100%;
+    background-color: lightgray;
+    padding-bottom: 1px;
 }
 
-.div_mask {
-    top: 30px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    position: fixed;
-    background-color: lightblue;
-    color: red;
-    font-weight: bold;
-    font-size: xx-large;
-    text-align: center;
+.report-toolbar-text {
+    font-size: x-small;
+    width: 30px;
     vertical-align: middle;
-    line-height: 300px;
+    text-align: center;
+}
+
+.report-toolbar-label {
+
+}
+
+.report-content {
+    margin: 50px 5px 30px 5px;
+}
+
+.report-content table tr td {
+    padding: 2px;
+}
+
+.div-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.div-loading {
+    margin: 200px auto;
+    width: 70px;
+}
+
+.ball-grid-pulse > div {
+    background-color: green;
 }

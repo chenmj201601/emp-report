@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class ReportDocument {
     private String name;
+    private String title;
     private String path;
     private ReportGrid grid;
     private List<ReportDataSet> dataSets = new ArrayList<>();
@@ -23,6 +24,14 @@ public class ReportDocument {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPath() {

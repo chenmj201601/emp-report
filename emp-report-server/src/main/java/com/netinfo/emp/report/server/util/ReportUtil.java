@@ -4,6 +4,8 @@ import com.netinfo.emp.report.model.*;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -14,6 +16,9 @@ import java.util.List;
  * Created by Charley on 2017/5/4.
  */
 public class ReportUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(ReportUtil.class);
+
     /**
      * 解析报表脚本文件
      *
@@ -26,6 +31,7 @@ public class ReportUtil {
         ReportDocument reportDocument = new ReportDocument();
         Element root = document.getRootElement();
         reportDocument.setName(root.getAttributeValue("Name"));
+        reportDocument.setTitle(root.getAttributeValue("Title"));
         Element grid = root.getChild("Grid", report);
         if (grid != null) {
             ReportGrid reportGrid = new ReportGrid();
@@ -51,6 +57,7 @@ public class ReportUtil {
                     for (int j = 0; j < tables.size(); j++) {
                         Element table = tables.get(j);
                         ReportDataTable reportDataTable = new ReportDataTable();
+                        reportDataTable.setKey(table.getAttributeValue("Key"));
                         reportDataTable.setName(table.getAttributeValue("Name"));
                         reportDataTable.setDisplay(table.getAttributeValue("Display"));
                         reportDataSet.getTables().add(reportDataTable);
@@ -62,6 +69,7 @@ public class ReportUtil {
                     for (int j = 0; j < fields.size(); j++) {
                         Element field = fields.get(j);
                         ReportDataField reportDataField = new ReportDataField();
+                        reportDataField.setKey(field.getAttributeValue("Key"));
                         reportDataField.setName(field.getAttributeValue("Name"));
                         reportDataField.setDisplay(field.getAttributeValue("Display"));
                         reportDataField.setDataType(Integer.parseInt(field.getAttributeValue("DataType")));
@@ -98,8 +106,24 @@ public class ReportUtil {
                         reportSequence.setDataSetName(element.getAttributeValue("DataSetName"));
                         reportSequence.setDataTableName(element.getAttributeValue("DataTableName"));
                         reportSequence.setDataFieldName(element.getAttributeValue("DataFieldName"));
+                        reportSequence.setExtMethod(Integer.parseInt(element.getAttributeValue("ExtMethod")));
+                        reportSequence.setMerge(element.getAttributeValue("IsMerge").equals("1"));
                         reportSequence.setExpression(element.getChildText("Expression", report));
                         reportCell.setElement(reportSequence);
+                    }
+                    if (strElementType.equals("ReportImage")) {
+                        ReportImage reportImage = new ReportImage();
+                        reportImage.setId(element.getAttributeValue("ID"));
+                        reportImage.setWidth(Integer.parseInt(element.getAttributeValue("Width")));
+                        reportImage.setHeight(Integer.parseInt(element.getAttributeValue("Height")));
+                        reportImage.setStretch(Integer.parseInt(element.getAttributeValue("Stretch")));
+                        reportImage.setExtension(Integer.parseInt(element.getAttributeValue("Extension")));
+                        reportImage.setAlt(element.getChildText("Alt",report));
+                        reportCell.setElement(reportImage);
+                    }
+                    if (reportCell.getElement() != null) {
+                        ReportElement reportElement = reportCell.getElement();
+                        reportElement.setLinkUrl(element.getAttributeValue("LinkUrl"));
                     }
                 }
                 reportDocument.getCells().add(reportCell);

@@ -2,6 +2,7 @@ package com.netinfo.emp;
 
 import com.netinfo.emp.report.model.ReportDocument;
 import com.netinfo.emp.report.server.entity.DataSetResult;
+import com.netinfo.emp.report.server.entity.ReportGenerator;
 import com.netinfo.emp.report.server.util.DataUtil;
 import com.netinfo.emp.report.server.util.ReportUtil;
 import org.jdom2.Document;
@@ -27,7 +28,9 @@ public class DataUtilTest {
         SAXBuilder builder = new SAXBuilder();
         Document document = builder.build(file);
         ReportDocument reportDocument = ReportUtil.getReportDocument(document);
-        Map<String, DataSetResult> dataSetResults = DataUtil.queryAllData(reportDocument);
+        ReportGenerator generator=new ReportGenerator();
+        generator.setReportDocument(reportDocument);
+        Map<String, DataSetResult> dataSetResults = DataUtil.queryAllData(generator);
         System.out.println(String.format("End %d", dataSetResults.size()));
     }
 }

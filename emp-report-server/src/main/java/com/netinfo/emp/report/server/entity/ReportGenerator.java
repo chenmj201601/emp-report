@@ -15,10 +15,14 @@ import java.util.Map;
  */
 public class ReportGenerator {
     private String key;
+    private String sessionId;
     private String reportName;
     private File reportFile;
+    private boolean dataLoaded;
+    private int pageIndex;
+    private int pageCount;
     private ReportDocument reportDocument;
-    private Map<String, VisualStyle> reportStyles = new HashMap<>();
+    private Map<String, DataSetResult> dataSetResults = new HashMap<>();
 
     public String getKey() {
         return key;
@@ -26,6 +30,14 @@ public class ReportGenerator {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getReportName() {
@@ -52,7 +64,32 @@ public class ReportGenerator {
         this.reportDocument = reportDocument;
     }
 
-    public Map<String, VisualStyle> getReportStyles() {
-        return this.reportStyles;
+    public boolean isDataLoaded() {
+        return dataLoaded;
     }
+
+    public void setDataLoaded(boolean dataLoaded) {
+        this.dataLoaded = dataLoaded;
+    }
+
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    public Map<String, DataSetResult> getDataSetResults() {
+        return dataSetResults;
+    }
+
 }

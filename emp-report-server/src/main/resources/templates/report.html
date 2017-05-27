@@ -4,23 +4,77 @@
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Report</title>
+    <title th:text="${report_title}"></title>
     <!--引入bootstrap样式-->
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="/css/common.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" th:href="@{/report_server/css(report_key=${report_key})}">
+    <link th:href="@{/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/loaders/loaders.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/report_server/css(report_key=${report_key})}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div>
-    <div id="report_toolbar" class="report_toolbar">
-        这是报表工具栏
+    <div id="report_toolbar" class="report-toolbar btn-toolbar">
+        <div class="btn-group">
+            <button id="btn_first_page" type="button" class="btn btn-default btn-xs">
+                <span class="fa fa-fast-backward">首页</span>
+            </button>
+            <button id="btn_pre_page" type="button" class="btn btn-default btn-xs">
+                <span class="fa fa-backward">上一页</span>
+            </button>
+        </div>
+        <div class="btn-group">
+            <input id="txt_page_index" type="text" value="1" class="report-toolbar-text">
+            <span class="report-toolbar-label"> / </span>
+            <span id="txt_page_count" class="report-toolbar-label">1</span>
+            &nbsp;
+        </div>
+        <div class="btn-group">
+            <button id="btn_next_page" type="button" class="btn btn-default btn-xs">
+                <span class="fa fa-forward">下一页</span>
+            </button>
+            <button id="btn_last_page" type="button" class="btn btn-default btn-xs">
+                <span class="fa fa-fast-forward">末页</span>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button id="btn_print" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-print">打印</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#" id="btn_print_do"><span class="fa fa-print">&nbsp;打印</span></a></li>
+                <li><a href="#" id="btn_print_preview"><span class="fa fa-print">&nbsp;打印预览</span></a></li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button id="btn_export" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                <span class="fa fa-share">导出</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#" id="btn_export_pdf"><span class="fa fa-file-pdf-o">&nbsp;PDF</span></a></li>
+                <li><a href="#" id="btn_export_excel"><span class="fa fa-file-excel-o">&nbsp;Excel</span></a></li>
+                <li><a href="#" id="btn_export_word"><span class="fa fa-file-word-o">&nbsp;Word</span></a></li>
+                <li><a href="#" id="btn_export_image"><span class="fa fa-file-image-o">&nbsp;图片</span></a></li>
+            </ul>
+        </div>
     </div>
-    <div id="report_content"></div>
-    <div id="div_mask" class="div_mask">Loading...</div>
+    <div id="report_content" class="report-content"></div>
+    <div id="div_mask" class="div-mask">
+        <div class="div-loading loader-inner ball-grid-pulse"></div>
+    </div>
 </div>
-<input type="hidden" id="report_key" th:value="${report_key}">
-<script type="text/javascript" src="/bootstrap/js/jquery.js"></script>
-<script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
+
+
+<!--在隐藏标签中存放ReportKey-->
+<input type="hidden" id="hidden_report_key" th:value="${report_key}">
+<input type="hidden" id="hidden_page_index" th:value="${page_index}">
+<input type="hidden" id="hidden_page_count" th:value="${page_count}">
+
+<script type="text/javascript" th:src="@{/bootstrap/js/jquery.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{/loaders/loaders.css.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
 </body>
 </html>

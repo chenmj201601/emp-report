@@ -5,6 +5,7 @@
     <groupId>com.netinfo.emp</groupId>
     <artifactId>emp-report</artifactId>
     <version>2.01.001</version>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -14,13 +15,9 @@
     </parent>
 
     <modules>
-        <module>emp-report-server</module>
         <module>emp-report-model</module>
+        <module>emp-report-server</module>
     </modules>
-    <packaging>pom</packaging>
-
-    <name>emp-report</name>
-    <url>http://www.netinfo.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

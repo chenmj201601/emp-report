@@ -7,10 +7,19 @@ package com.netinfo.emp.report.model;
  * Created by Charley on 2017/5/4.
  */
 public class ReportDataField {
+    private String key;
     private String name;
     private String display;
     private int dataType;
     private String tableName;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getName() {
         return name;

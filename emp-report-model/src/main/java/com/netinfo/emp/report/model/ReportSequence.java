@@ -11,6 +11,8 @@ public class ReportSequence extends ReportElement {
     private String dataTableName;
     private String dataFieldName;
     private String expression;
+    private int extMethod;
+    private boolean merge;
 
     public String getDataSetName() {
         return dataSetName;
@@ -42,5 +44,21 @@ public class ReportSequence extends ReportElement {
 
     public void setExpression(String expression) {
         this.expression = expression;
+    }
+
+    public int getExtMethod() {
+        return extMethod;
+    }
+
+    public void setExtMethod(int extMethod) {
+        this.extMethod = extMethod;
+    }
+
+    public boolean isMerge() {
+        return merge;
+    }
+
+    public void setMerge(boolean merge) {
+        this.merge = merge;
     }
 }

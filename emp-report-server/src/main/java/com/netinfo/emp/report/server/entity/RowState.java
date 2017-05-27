@@ -3,6 +3,7 @@ package com.netinfo.emp.report.server.entity;
 import com.netinfo.emp.report.model.ReportCell;
 import org.jdom2.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +17,14 @@ public class RowState {
     private int rowIndex;
     private int rowHeight;
     private int colCount;
+    private int maxPageHeight;
+    private int pageHeight;
+    private int pageIndex;
+    private int dataIndex;
     private Map<String, ReportCell> cellMap;
     private List<String> skipCells;
     private Element tableElement;
-    private Map<String, QueryResult> queryResults;
+    private List<Map<String, QueryResult>> queryResultsCollection = new ArrayList<>();
 
     public int getRowIndex() {
         return rowIndex;
@@ -43,6 +48,38 @@ public class RowState {
 
     public void setColCount(int colCount) {
         this.colCount = colCount;
+    }
+
+    public int getMaxPageHeight() {
+        return maxPageHeight;
+    }
+
+    public void setMaxPageHeight(int maxPageHeight) {
+        this.maxPageHeight = maxPageHeight;
+    }
+
+    public int getPageHeight() {
+        return pageHeight;
+    }
+
+    public void setPageHeight(int pageHeight) {
+        this.pageHeight = pageHeight;
+    }
+
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
+    }
+
+    public int getDataIndex() {
+        return dataIndex;
+    }
+
+    public void setDataIndex(int dataIndex) {
+        this.dataIndex = dataIndex;
     }
 
     public Map<String, ReportCell> getCellMap() {
@@ -69,11 +106,11 @@ public class RowState {
         this.tableElement = tableElement;
     }
 
-    public Map<String, QueryResult> getQueryResults() {
-        return queryResults;
+    public List<Map<String, QueryResult>> getQueryResultsCollection() {
+        return queryResultsCollection;
     }
 
-    public void setQueryResults(Map<String, QueryResult> queryResults) {
-        this.queryResults = queryResults;
+    public void setQueryResultsCollection(List<Map<String, QueryResult>> queryResultsCollection) {
+        this.queryResultsCollection = queryResultsCollection;
     }
 }

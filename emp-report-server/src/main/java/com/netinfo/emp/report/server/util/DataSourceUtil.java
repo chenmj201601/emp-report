@@ -4,6 +4,8 @@ import com.netinfo.emp.report.server.entity.DataSource;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -19,6 +21,8 @@ import java.util.Map;
  * Created by Charley on 2017/5/9.
  */
 public class DataSourceUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(DataSourceUtil.class);
 
     /**
      * 加载所有数据源信息
@@ -58,10 +62,10 @@ public class DataSourceUtil {
                 }
             }
         } catch (FileNotFoundException ex) {
-            System.out.println(String.format("DataSource config file not exist."));
+            logger.error(String.format("DataSource config file not exist."));
             ex.printStackTrace();
         } catch (Exception ex) {
-            System.out.println(String.format("Fail. %s", ex.getMessage()));
+            logger.error(String.format("Fail. %s", ex.getMessage()));
             ex.printStackTrace();
         }
         return mapDataSources;

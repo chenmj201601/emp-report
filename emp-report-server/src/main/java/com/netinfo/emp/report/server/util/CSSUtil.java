@@ -5,6 +5,8 @@ import com.netinfo.emp.report.model.ReportDefine;
 import com.netinfo.emp.report.model.ReportDocument;
 import com.netinfo.emp.report.model.VisualStyle;
 import com.netinfo.emp.report.server.entity.ReportGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ import java.util.List;
  */
 public class CSSUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(CSSUtil.class);
+
     /**
      * 生成 CSS 文档
      *
@@ -26,19 +30,19 @@ public class CSSUtil {
         String strCSS = "";
         try {
             if (generator == null) {
-                System.out.println(String.format("ReportGenerator is null."));
+                logger.error(String.format("ReportGenerator is null."));
                 return strCSS;
             }
             String reportName = generator.getReportName();
             ReportDocument reportDocument = generator.getReportDocument();
             if (reportDocument == null) {
-                System.out.println(String.format("ReportDocument not exist. %s", reportName));
+                logger.error(String.format("ReportDocument not exist. %s", reportName));
                 return strCSS;
             }
             StringBuilder sb = new StringBuilder();
             List<VisualStyle> styles = reportDocument.getStyles();
             for (int i = 0; i < styles.size(); i++) {
-                String strClassName = String.format("style_%d", i);
+                String strClassName = String.format("style-%d", i);
                 sb.append(String.format(".%s{\r\n", strClassName));
                 VisualStyle style = styles.get(i);
                 String fontFamily = style.getFontFamily();
@@ -82,7 +86,7 @@ public class CSSUtil {
                 if (backColor != null
                         && !backColor.equals("")
                         && backColor.length() > 3) {
-                    sb.append(String.format("background-color:#%s;\r\n", foreColor.substring(3)));
+                    sb.append(String.format("background-color:#%s;\r\n", backColor.substring(3)));
                 }
                 ReportBorder border = style.getBorder();
                 if (border != null) {
@@ -109,6 +113,7 @@ public class CSSUtil {
             }
             strCSS = sb.toString();
         } catch (Exception ex) {
+            logger.error(String.format("Fail. %s", ex.getMessage()));
             ex.printStackTrace();
         }
         return strCSS;

@@ -7,6 +7,9 @@ import com.netinfo.emp.report.model.ReportDocument;
 import com.netinfo.emp.report.server.entity.DataSetResult;
 import com.netinfo.emp.report.server.entity.DataSource;
 import com.netinfo.emp.report.server.entity.QueryResult;
+import com.netinfo.emp.report.server.entity.ReportGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,12 +25,15 @@ import java.util.Map;
  */
 public class DataUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(DataUtil.class);
+
     //查询数据，返回数据列表
     public static List<Map<String, QueryResult>> queryData(ReportDataSet reportDataSet) {
         List<Map<String, QueryResult>> datas = new ArrayList<>();
         if (reportDataSet == null) {
             return datas;
         }
+        String dataSetName=reportDataSet.getName();
 
         //<editor-fold desc="构造查询语句">
 
@@ -43,7 +49,7 @@ public class DataUtil {
             strFields = strFields.substring(0, strFields.length() - 1);
         }
         String strSql = String.format("select %s from %s", strFields, strTableName);
-        System.out.println(String.format("Sql: %s", strSql));
+        logger.info(String.format("Sql: %s", strSql));
 
         //</editor-fold>
 
@@ -53,7 +59,7 @@ public class DataUtil {
         Map<String, DataSource> dataSources = DataSourceUtil.loadDataSources();
         DataSource dataSource = dataSources.get(dataSourceName);
         if (dataSource == null) {
-            System.out.println(String.format("DataSource not exist. %s", dataSourceName));
+            logger.error(String.format("DataSource not exist. %s", dataSourceName));
             return datas;
         }
 
@@ -69,13 +75,13 @@ public class DataUtil {
                 strUrl = String.format("jdbc:mysql://%s:%d/%s", dataSource.getHost(), dataSource.getPort(), dataSource.getDbName());
             }
             if (dbType == 2) {
-                Class.forName("com.microsoft.sqlserver.Driver");
-                strUrl = String.format("jdbc:sqlserver://%s:%d/%s", dataSource.getHost(), dataSource.getPort(), dataSource.getDbName());
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                strUrl = String.format("jdbc:sqlserver://%s:%d;DatabaseName=%s", dataSource.getHost(), dataSource.getPort(), dataSource.getDbName());
             }
         } catch (ClassNotFoundException ex) {
-            System.out.println(String.format("Driver class not found. %s", ex.getMessage()));
+            logger.error(String.format("Driver class not found. %s", ex.getMessage()));
         } catch (Exception ex) {
-            System.out.println(String.format("Fail. %s", ex.getMessage()));
+            logger.error(String.format("Fail. %s", ex.getMessage()));
             ex.printStackTrace();
         }
         Connection con = null;
@@ -92,18 +98,19 @@ public class DataUtil {
                 for (int i = 0; i < reportDataFields.size(); i++) {
                     ReportDataField field = reportDataFields.get(i);
                     String strName = field.getName();
+                    String strKey=String.format("%s.%s",dataSetName,strName);
                     QueryResult result = new QueryResult();
-                    result.setName(strName);
+                    result.setKey(strKey);
                     result.setField(field);
                     result.setValue(resultSet.getString(strName));
-                    row.put(strName, result);
+                    row.put(strKey, result);
                 }
                 datas.add(row);
             }
         } catch (SQLException ex) {
-            System.out.println(String.format("Get connection fail. %s", ex.getMessage()));
+            logger.error(String.format("Get connection fail. %s", ex.getMessage()));
         } catch (Exception ex) {
-            System.out.println(String.format("Fail. %s", ex.getMessage()));
+            logger.error(String.format("Fail. %s", ex.getMessage()));
             ex.printStackTrace();
         } finally {
 
@@ -140,9 +147,14 @@ public class DataUtil {
         return datas;
     }
 
-    public static Map<String, DataSetResult> queryAllData(ReportDocument reportDocument) {
-        Map<String, DataSetResult> dataSetResults = new HashMap<>();
-        if(reportDocument==null){
+    public static Map<String, DataSetResult> queryAllData(ReportGenerator generator) {
+        if (generator == null) {
+            return null;
+        }
+        Map<String, DataSetResult> dataSetResults = generator.getDataSetResults();
+        dataSetResults.clear();
+        ReportDocument reportDocument = generator.getReportDocument();
+        if (reportDocument == null) {
             return dataSetResults;
         }
         List<ReportDataSet> reportDataSets = reportDocument.getDataSets();
@@ -156,7 +168,7 @@ public class DataUtil {
             for (int k = 0; k < datas.size(); k++) {
                 dataSetResult.getResult().add(datas.get(k));
             }
-            System.out.println(String.format("Data count for %s is %d", strName, dataSetResult.getResult().size()));
+            logger.info(String.format("Data count for %s is %d", strName, dataSetResult.getResult().size()));
             dataSetResults.put(strName, dataSetResult);
         }
         return dataSetResults;
