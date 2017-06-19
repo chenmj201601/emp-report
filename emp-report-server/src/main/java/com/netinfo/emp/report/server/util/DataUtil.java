@@ -4,18 +4,12 @@ import com.netinfo.emp.report.model.ReportDataField;
 import com.netinfo.emp.report.model.ReportDataSet;
 import com.netinfo.emp.report.model.ReportDataTable;
 import com.netinfo.emp.report.model.ReportDocument;
-import com.netinfo.emp.report.server.entity.DataSetResult;
-import com.netinfo.emp.report.server.entity.DataSource;
-import com.netinfo.emp.report.server.entity.QueryResult;
-import com.netinfo.emp.report.server.entity.ReportGenerator;
+import com.netinfo.emp.report.server.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Project emp-report
@@ -27,28 +21,25 @@ public class DataUtil {
 
     private static Logger logger = LoggerFactory.getLogger(DataUtil.class);
 
-    //查询数据，返回数据列表
-    public static List<Map<String, QueryResult>> queryData(ReportDataSet reportDataSet) {
-        List<Map<String, QueryResult>> datas = new ArrayList<>();
+    /**
+     * 查询数据，返回数据列表
+     *
+     * @param reportDataSet
+     * @param generator
+     * @return
+     */
+    public static List<DataRecord> queryData(ReportDataSet reportDataSet, ReportGenerator generator) {
+        List<DataRecord> datas = new ArrayList<>();
         if (reportDataSet == null) {
             return datas;
         }
-        String dataSetName=reportDataSet.getName();
+        String dataSetName = reportDataSet.getName();
 
         //<editor-fold desc="构造查询语句">
 
         List<ReportDataTable> reportDataTables = reportDataSet.getTables();
         List<ReportDataField> reportDataFields = reportDataSet.getFields();
-        ReportDataTable reportDataTable = reportDataTables.get(0);
-        String strTableName = reportDataTable.getName();
-        String strFields = "";
-        for (int i = 0; i < reportDataFields.size(); i++) {
-            strFields += String.format(" %s,", reportDataFields.get(i).getName());
-        }
-        if (!strFields.equals("")) {
-            strFields = strFields.substring(0, strFields.length() - 1);
-        }
-        String strSql = String.format("select %s from %s", strFields, strTableName);
+        String strSql = reportDataSet.getSql();     //设计器已经将Sql语句构造好，这里直接拿来用即可，无需构造
         logger.info(String.format("Sql: %s", strSql));
 
         //</editor-fold>
@@ -56,7 +47,7 @@ public class DataUtil {
         //<editor-fold desc="检索 DataSource">
 
         String dataSourceName = reportDataSet.getDataSourceName();
-        Map<String, DataSource> dataSources = DataSourceUtil.loadDataSources();
+        Map<String, DataSource> dataSources = DataSourceUtil.loadDataSources(generator);
         DataSource dataSource = dataSources.get(dataSourceName);
         if (dataSource == null) {
             logger.error(String.format("DataSource not exist. %s", dataSourceName));
@@ -72,7 +63,7 @@ public class DataUtil {
         try {
             if (dbType == 1) {
                 Class.forName("com.mysql.jdbc.Driver");
-                strUrl = String.format("jdbc:mysql://%s:%d/%s", dataSource.getHost(), dataSource.getPort(), dataSource.getDbName());
+                strUrl = String.format("jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=gbk", dataSource.getHost(), dataSource.getPort(), dataSource.getDbName());
             }
             if (dbType == 2) {
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -94,18 +85,19 @@ public class DataUtil {
             pstmt = con.prepareStatement(strSql);
             resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
-                Map<String, QueryResult> row = new HashMap<>();
+                DataRecord dataRecord = new DataRecord();
+                dataRecord.setId(UUID.randomUUID().toString());
                 for (int i = 0; i < reportDataFields.size(); i++) {
                     ReportDataField field = reportDataFields.get(i);
                     String strName = field.getName();
-                    String strKey=String.format("%s.%s",dataSetName,strName);
+                    String strKey = String.format("%s.%s", dataSetName, strName);
                     QueryResult result = new QueryResult();
                     result.setKey(strKey);
                     result.setField(field);
                     result.setValue(resultSet.getString(strName));
-                    row.put(strKey, result);
+                    dataRecord.getResults().put(strKey, result);
                 }
-                datas.add(row);
+                datas.add(dataRecord);
             }
         } catch (SQLException ex) {
             logger.error(String.format("Get connection fail. %s", ex.getMessage()));
@@ -147,6 +139,12 @@ public class DataUtil {
         return datas;
     }
 
+    /**
+     * 查询所有数据集的数据
+     *
+     * @param generator
+     * @return
+     */
     public static Map<String, DataSetResult> queryAllData(ReportGenerator generator) {
         if (generator == null) {
             return null;
@@ -161,7 +159,7 @@ public class DataUtil {
         for (int i = 0; i < reportDataSets.size(); i++) {
             ReportDataSet reportDataSet = reportDataSets.get(i);
             String strName = reportDataSet.getName();
-            List<Map<String, QueryResult>> datas = queryData(reportDataSet);
+            List<DataRecord> datas = queryData(reportDataSet, generator);
             DataSetResult dataSetResult = new DataSetResult();
             dataSetResult.setName(strName);
             dataSetResult.setDataSet(reportDataSet);
@@ -172,6 +170,37 @@ public class DataUtil {
             dataSetResults.put(strName, dataSetResult);
         }
         return dataSetResults;
+    }
+
+    /**
+     * 数据分组
+     *
+     * @param fieldName
+     * @param datas
+     * @return
+     */
+    public static Map<String, GroupResult> filterFieldData(String fieldName, List<DataRecord> datas) {
+        Map<String, GroupResult> resultMap = new HashMap<>();
+        if (datas == null) {
+            return resultMap;
+        }
+        for (int i = 0; i < datas.size(); i++) {
+            DataRecord data = datas.get(i);
+            QueryResult fieldResult = data.getResults().get(fieldName);
+            if (fieldResult == null) {
+                continue;
+            }
+            String strValue = fieldResult.getValue().toString();
+            GroupResult result = resultMap.get(strValue);
+            if (result == null) {
+                result = new GroupResult();
+                result.setFieldName(fieldName);
+                result.setGroupValue(strValue);
+                resultMap.put(strValue, result);
+            }
+            result.getResults().add(data);
+        }
+        return resultMap;
     }
 
 }

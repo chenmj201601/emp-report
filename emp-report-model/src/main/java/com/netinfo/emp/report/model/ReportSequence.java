@@ -11,8 +11,9 @@ public class ReportSequence extends ReportElement {
     private String dataTableName;
     private String dataFieldName;
     private String expression;
-    private int extMethod;
-    private boolean merge;
+    private int optMethod;
+    private int groupMode;
+    private int collectMode;
 
     public String getDataSetName() {
         return dataSetName;
@@ -46,19 +47,27 @@ public class ReportSequence extends ReportElement {
         this.expression = expression;
     }
 
-    public int getExtMethod() {
-        return extMethod;
+    public int getOptMethod() {
+        return optMethod;
     }
 
-    public void setExtMethod(int extMethod) {
-        this.extMethod = extMethod;
+    public void setOptMethod(int optMethod) {
+        this.optMethod = optMethod;
     }
 
-    public boolean isMerge() {
-        return merge;
+    public int getGroupMode() {
+        return groupMode;
     }
 
-    public void setMerge(boolean merge) {
-        this.merge = merge;
+    public void setGroupMode(int groupMode) {
+        this.groupMode = groupMode;
+    }
+
+    public int getCollectMode() {
+        return collectMode;
+    }
+
+    public void setCollectMode(int collectMode) {
+        this.collectMode = collectMode;
     }
 }

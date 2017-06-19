@@ -12,6 +12,12 @@ public class ReportCell {
     private int rowSpan;
     private int colSpan;
     private int style;
+    private String linkUrl;
+    private int extDirection;
+    private String leftParent;
+    private String topParent;
+    private int formatType;
+    private String formatString;
     private ReportElement element;
 
     public int getRowIndex() {
@@ -52,6 +58,54 @@ public class ReportCell {
 
     public void setStyle(int style) {
         this.style = style;
+    }
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
+
+    public int getExtDirection() {
+        return extDirection;
+    }
+
+    public void setExtDirection(int extDirection) {
+        this.extDirection = extDirection;
+    }
+
+    public String getLeftParent() {
+        return leftParent;
+    }
+
+    public void setLeftParent(String leftParent) {
+        this.leftParent = leftParent;
+    }
+
+    public String getTopParent() {
+        return topParent;
+    }
+
+    public void setTopParent(String topParent) {
+        this.topParent = topParent;
+    }
+
+    public int getFormatType() {
+        return formatType;
+    }
+
+    public void setFormatType(int formatType) {
+        this.formatType = formatType;
+    }
+
+    public String getFormatString() {
+        return formatString;
+    }
+
+    public void setFormatString(String formatString) {
+        this.formatString = formatString;
     }
 
     public ReportElement getElement() {

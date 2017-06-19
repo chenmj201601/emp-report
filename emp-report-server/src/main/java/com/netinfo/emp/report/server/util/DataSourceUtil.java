@@ -1,12 +1,12 @@
 package com.netinfo.emp.report.server.util;
 
 import com.netinfo.emp.report.server.entity.DataSource;
+import com.netinfo.emp.report.server.entity.ReportGenerator;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,10 +29,14 @@ public class DataSourceUtil {
      *
      * @return
      */
-    public static Map<String, DataSource> loadDataSources() {
+    public static Map<String, DataSource> loadDataSources(ReportGenerator generator) {
         Map<String, DataSource> mapDataSources = new HashMap<>();
         try {
-            File file = ResourceUtils.getFile("datasource.xml");
+            if (generator == null) {
+                logger.error(String.format("ReportGenerator is null."));
+                return mapDataSources;
+            }
+            File file = generator.getDataSourceFile();
             SAXBuilder builder = new SAXBuilder();
             Document document = builder.build(file);
             Element root = document.getRootElement();

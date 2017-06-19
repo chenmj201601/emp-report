@@ -1,6 +1,8 @@
 package com.netinfo.emp.report.server.entity;
 
 /**
+ * 数据源信息
+ * <p>
  * Project emp-report
  * Package com.netinfo.emp.report.server.entity
  * <p>

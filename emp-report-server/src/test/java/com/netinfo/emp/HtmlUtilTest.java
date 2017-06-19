@@ -26,8 +26,8 @@ public class HtmlUtilTest {
 
     @Test
     public void testGenerateHtml() throws IOException, JDOMException {
-        String reportName="user";
-        ReportGenerator generator=new ReportGenerator();
+        String reportName = "user";
+        ReportGenerator generator = new ReportGenerator();
         generator.setReportName(reportName);
         File file = ResourceUtils.getFile(String.format("classpath:user.rpt"));
         SAXBuilder builder = new SAXBuilder();

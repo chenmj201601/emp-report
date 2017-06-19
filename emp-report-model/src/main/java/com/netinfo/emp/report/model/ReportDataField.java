@@ -11,6 +11,7 @@ public class ReportDataField {
     private String name;
     private String display;
     private int dataType;
+    private String fieldName;
     private String tableName;
 
     public String getKey() {
@@ -43,6 +44,14 @@ public class ReportDataField {
 
     public void setDataType(int dataType) {
         this.dataType = dataType;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public String getTableName() {

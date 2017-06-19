@@ -51,6 +51,10 @@ public class ReportUtil {
                 ReportDataSet reportDataSet = new ReportDataSet();
                 reportDataSet.setName(dataSet.getAttributeValue("Name"));
                 reportDataSet.setDataSourceName(dataSet.getAttributeValue("DataSourceName"));
+                Element sql = dataSet.getChild("Sql", report);
+                if (sql != null) {
+                    reportDataSet.setSql(sql.getText());
+                }
                 Element tablesElement = dataSet.getChild("Tables", report);
                 if (tablesElement != null) {
                     List<Element> tables = tablesElement.getChildren("Table", report);
@@ -73,8 +77,36 @@ public class ReportUtil {
                         reportDataField.setName(field.getAttributeValue("Name"));
                         reportDataField.setDisplay(field.getAttributeValue("Display"));
                         reportDataField.setDataType(Integer.parseInt(field.getAttributeValue("DataType")));
+                        reportDataField.setFieldName(field.getAttributeValue("FieldName"));
                         reportDataField.setTableName(field.getAttributeValue("TableName"));
                         reportDataSet.getFields().add(reportDataField);
+                    }
+                }
+                Element conditionsElement = dataSet.getChild("Conditions", report);
+                if (conditionsElement != null) {
+                    List<Element> conditions = conditionsElement.getChildren("Condition", report);
+                    for (int j = 0; j < conditions.size(); j++) {
+                        Element condition = conditions.get(j);
+                        ReportCondition reportCondition = new ReportCondition();
+                        reportCondition.setField(condition.getAttributeValue("Field"));
+                        reportCondition.setJudge(Integer.parseInt(condition.getAttributeValue("Judge")));
+                        reportCondition.setRelation(Integer.parseInt(condition.getAttributeValue("Relation")));
+                        Element conditionValue = condition.getChild("Value", report);
+                        if (conditionValue != null) {
+                            reportCondition.setValue(conditionValue.getText());
+                        }
+                        reportDataSet.getConditions().add(reportCondition);
+                    }
+                }
+                Element ordersElement = dataSet.getChild("Orders", report);
+                if (ordersElement != null) {
+                    List<Element> orders = ordersElement.getChildren("Order", report);
+                    for (int j = 0; j < orders.size(); j++) {
+                        Element order = orders.get(j);
+                        ReportOrder reportOrder = new ReportOrder();
+                        reportOrder.setField(order.getAttributeValue("Field"));
+                        reportOrder.setDirection(Integer.parseInt(order.getAttributeValue("Direction")));
+                        reportDataSet.getOrders().add(reportOrder);
                     }
                 }
                 reportDocument.getDataSets().add(reportDataSet);
@@ -90,6 +122,12 @@ public class ReportUtil {
                 reportCell.setColIndex(Integer.parseInt(cell.getAttributeValue("ColIndex")));
                 reportCell.setRowSpan(Integer.parseInt(cell.getAttributeValue("RowSpan")));
                 reportCell.setColSpan(Integer.parseInt(cell.getAttributeValue("ColSpan")));
+                reportCell.setLinkUrl(cell.getAttributeValue("LinkUrl"));
+                reportCell.setExtDirection(Integer.parseInt(cell.getAttributeValue("ExtDirection")));
+                reportCell.setLeftParent(cell.getAttributeValue("LeftParent"));
+                reportCell.setTopParent(cell.getAttributeValue("TopParent"));
+                reportCell.setFormatType(Integer.parseInt(cell.getAttributeValue("FormatType")));
+                reportCell.setFormatString(cell.getAttributeValue("FormatString"));
                 if (cell.getAttributeValue("Style") != null) {
                     reportCell.setStyle(Integer.parseInt(cell.getAttributeValue("Style")));
                 }
@@ -106,9 +144,10 @@ public class ReportUtil {
                         reportSequence.setDataSetName(element.getAttributeValue("DataSetName"));
                         reportSequence.setDataTableName(element.getAttributeValue("DataTableName"));
                         reportSequence.setDataFieldName(element.getAttributeValue("DataFieldName"));
-                        reportSequence.setExtMethod(Integer.parseInt(element.getAttributeValue("ExtMethod")));
-                        reportSequence.setMerge(element.getAttributeValue("IsMerge").equals("1"));
                         reportSequence.setExpression(element.getChildText("Expression", report));
+                        reportSequence.setOptMethod(Integer.parseInt(element.getAttributeValue("DataOptMethod")));
+                        reportSequence.setGroupMode(Integer.parseInt(element.getAttributeValue("GroupMode")));
+                        reportSequence.setCollectMode(Integer.parseInt(element.getAttributeValue("CollectMode")));
                         reportCell.setElement(reportSequence);
                     }
                     if (strElementType.equals("ReportImage")) {
@@ -118,12 +157,8 @@ public class ReportUtil {
                         reportImage.setHeight(Integer.parseInt(element.getAttributeValue("Height")));
                         reportImage.setStretch(Integer.parseInt(element.getAttributeValue("Stretch")));
                         reportImage.setExtension(Integer.parseInt(element.getAttributeValue("Extension")));
-                        reportImage.setAlt(element.getChildText("Alt",report));
+                        reportImage.setAlt(element.getChildText("Alt", report));
                         reportCell.setElement(reportImage);
-                    }
-                    if (reportCell.getElement() != null) {
-                        ReportElement reportElement = reportCell.getElement();
-                        reportElement.setLinkUrl(element.getAttributeValue("LinkUrl"));
                     }
                 }
                 reportDocument.getCells().add(reportCell);

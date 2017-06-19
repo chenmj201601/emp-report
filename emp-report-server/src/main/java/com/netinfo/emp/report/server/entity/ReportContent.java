@@ -1,15 +1,19 @@
 package com.netinfo.emp.report.server.entity;
 
 /**
+ * 报表主体内容，包括 html 标记及分页信息
+ * <p>
  * Project emp-report
  * Package com.netinfo.emp.report.server.entity
  * <p>
  * Created by Charley on 2017/5/19.
  */
 public class ReportContent {
+    //ReportKey
     private String key;
     private int pageIndex;
     private int pageCount;
+    //Html标记内容
     private String content;
 
     public String getKey() {
